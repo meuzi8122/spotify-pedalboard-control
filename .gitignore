@@ -8,3 +8,9 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# src-python
+src-python/build
+src-python/dist
+src-python/*.spec
+src-python/*/__pycache__
