@@ -1,0 +1,2 @@
+- npm ci
+- npm tauri run dev
