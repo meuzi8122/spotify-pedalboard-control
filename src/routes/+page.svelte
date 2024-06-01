@@ -18,7 +18,7 @@
       filters: [{ name: "", extensions: VALID_EXTENSIONS }],
     });
 
-    if (_inputFilePath && _inputFilePath.path) {
+    if (_inputFilePath?.path) {
       inputFilePath = _inputFilePath.path;
     }
   }
