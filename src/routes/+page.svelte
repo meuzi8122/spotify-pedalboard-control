@@ -1,8 +1,8 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
-  import { save } from "@tauri-apps/plugin-dialog";
+  import { open, save } from "@tauri-apps/plugin-dialog";
 
-  const VALID_EXTENSIONS = [".wav", ".mp3"];
+  const VALID_EXTENSIONS = ["wav", "mp3"];
 
   let inputFilePath: string = "";
 
@@ -13,12 +13,20 @@
 
   let effectors: any[] = [];
 
-  async function applyEffects() {
-    const outputFilePath = await save({
-      filters: [{ name: "output-file-filter", extensions: VALID_EXTENSIONS }],
+  async function selectInputFile() {
+    const _inputFilePath = await open({
+      filters: [{ name: "", extensions: VALID_EXTENSIONS }],
     });
 
-    console.log(outputFilePath);
+    if (_inputFilePath && _inputFilePath.path) {
+      inputFilePath = _inputFilePath.path;
+    }
+  }
+
+  async function applyEffects() {
+    const outputFilePath = await save({
+      filters: [{ name: "", extensions: VALID_EXTENSIONS }],
+    });
 
     if (outputFilePath) {
       await invoke("apply_effects", {
@@ -31,4 +39,6 @@
 </script>
 
 <p>hello</p>
+<button on:click={selectInputFile}>select</button>
 <button on:click={applyEffects}>apply</button>
+{inputFileName}
