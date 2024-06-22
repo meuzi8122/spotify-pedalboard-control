@@ -10,6 +10,7 @@
   import PhaserParameterForm from "$lib/component/form/PhaserParameterForm.svelte";
   import type { Pedal } from "../lib/pedal-type";
   import { v4 as uuidv4 } from "uuid";
+  import TrashIcon from "$lib/component/icon/TrashIcon.svelte";
 
   function selectPedal(id: string) {
     selectedPedalId = id;
@@ -58,6 +59,10 @@
     pedals.push({ id: uuidv4(), name: "", kind: "reverb", parameters: { roomSize: 1 } });
     pedals = pedals;
     selectLatestPedal();
+  }
+
+  function deletePedal() {
+    pedals = pedals.filter((pedal) => pedal.id != selectedPedalId);
   }
 
   async function applyEffects() {
@@ -130,21 +135,28 @@
       <li data-content="" class="step">end</li>
     </ul>
   </div>
-  <div>
-    {#if selectedPedal?.kind == "chorus"}
-      <ChorusParameterForm parameters={selectedPedal.parameters} />
-    {:else if selectedPedal?.kind == "compressor"}
-      <CompressorParameterForm parameters={selectedPedal.parameters} />
-    {:else if selectedPedal?.kind == "distortion"}
-      <DistortionParameterForm parameters={selectedPedal.parameters} />
-    {:else if selectedPedal?.kind == "delay"}
-      <DelayParameterForm parameters={selectedPedal.parameters} />
-    {:else if selectedPedal?.kind == "phaser"}
-      <PhaserParameterForm parameters={selectedPedal.parameters} />
-    {:else if selectedPedal?.kind == "reverb"}
-      <ReverbParameterForm parameters={selectedPedal.parameters} />
-    {/if}
-  </div>
+  {#if selectedPedal}
+    <div>
+      {#if selectedPedal.kind == "chorus"}
+        <ChorusParameterForm parameters={selectedPedal.parameters} />
+      {:else if selectedPedal.kind == "compressor"}
+        <CompressorParameterForm parameters={selectedPedal.parameters} />
+      {:else if selectedPedal.kind == "distortion"}
+        <DistortionParameterForm parameters={selectedPedal.parameters} />
+      {:else if selectedPedal.kind == "delay"}
+        <DelayParameterForm parameters={selectedPedal.parameters} />
+      {:else if selectedPedal.kind == "phaser"}
+        <PhaserParameterForm parameters={selectedPedal.parameters} />
+      {:else if selectedPedal.kind == "reverb"}
+        <ReverbParameterForm parameters={selectedPedal.parameters} />
+      {/if}
+    </div>
+    <div>
+      <button class="btn btn-error" on:click={deletePedal}>
+        <TrashIcon />
+      </button>
+    </div>
+  {/if}
 </div>
 
 <style>
