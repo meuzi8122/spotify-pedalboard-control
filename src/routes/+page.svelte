@@ -120,7 +120,7 @@
       <button class="btn btn-outline join-item" on:click={addReverb}>Reverb</button>
     </div>
     <div class="flex-none">
-      <button class="btn" on:click={applyEffects}>apply</button>
+      <button class="btn" on:click={applyEffects} disabled={pedals.length == 0}>apply</button>
     </div>
   </div>
   <div class="overflow-x-auto mb-5">
