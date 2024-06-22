@@ -11,7 +11,7 @@
       ? "ファイルが選択されていません"
       : inputFilePath.split("\\").at(-1);
 
-  let effectors: any[] = [];
+  let pedals: any[] = [];
 
   async function selectInputFile() {
     const _inputFilePath = await open({
@@ -32,7 +32,7 @@
       await invoke("apply_effects", {
         inputFilePath,
         outputFilePath,
-        effectors,
+        pedals,
       });
     }
   }

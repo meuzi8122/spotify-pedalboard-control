@@ -6,11 +6,11 @@ class PedalBoardGenerator:
     def __init__(
         self,
         input_file_path: str,
-        effectors: list[dict],
+        pedals: list[dict],
         output_file_path: str,
     ) -> None:
         self.input_file_path = input_file_path
-        self.effectors = effectors
+        self.pedals = pedals
         self.output_file_path = output_file_path
 
     def apply_effects(self):
@@ -34,8 +34,8 @@ class PedalBoardGenerator:
     def _generate_pedal_board(self) -> Pedalboard:
         pedal_board = Pedalboard()
 
-        for effector in self.effectors:
-            match effector:
+        for pedal in self.pedals:
+            match pedal:
                 case {
                     "name": name,
                     "kind": "chorus",

@@ -5,7 +5,7 @@ use std::collections::HashMap;
 /* エフェクターの種類ごとに構造体を作る必要はなさそう。 */
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Effector {
+pub struct Pedal {
     name: String,
     kind: String,
     parameters: HashMap<String, isize>,

@@ -6,7 +6,7 @@ class TestPedalBoardGenerator:
     def test_generate_pedal_board(self):
         generator = PedalBoardGenerator(
             input_file_path="1.wav",
-            effectors=[
+            pedals=[
                 {
                     "name": "chorus",
                     "kind": "chorus",
