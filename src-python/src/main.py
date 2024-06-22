@@ -4,11 +4,11 @@ import sys
 from src.pedal_board_generator import PedalBoardGenerator
 
 if __name__ == "__main__":
-    _, input_file_path, effectors, output_file_path = sys.argv
+    _, input_file_path, pedals, output_file_path = sys.argv
 
     generator = PedalBoardGenerator(
         input_file_path=input_file_path,
-        effectors=json.loads(effectors),
+        pedals=json.loads(pedals),
         output_file_path=output_file_path,
     )
 

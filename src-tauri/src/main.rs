@@ -1,6 +1,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod effector;
+mod pedal;
 
 use tauri_plugin_shell::ShellExt;
 
@@ -9,9 +9,9 @@ async fn apply_effects(
     app: tauri::AppHandle,
     input_file_path: String,
     output_file_path: String,
-    effectors: Vec<effector::model::Effector>,
+    pedals: Vec<pedal::model::Pedal>,
 ) {
-    match serde_json::to_string(&effectors) {
+    match serde_json::to_string(&pedals) {
         Ok(json) => {
             let cmd = app.shell().sidecar("main").unwrap().args([
                 input_file_path,
