@@ -1,5 +1,6 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
+  import { ask, message } from "@tauri-apps/plugin-dialog";
   import { FileDialogUtil } from "$lib/util/dialog/file";
   import { VALID_MUSIC_FILE_EXTENSIONS, PEDAL_KIND_MAP } from "../lib/constant";
   import ChorusParameterForm from "$lib/component/form/ChorusParameterForm.svelte";
@@ -72,9 +73,11 @@
     );
 
     if (!inputFilePath) {
-      /* message dialog */
+      await message("ファイルが選択されていません。エフェクトの適用を中断します。");
       return;
     }
+
+    /* ファイルの上書きチェックは自動で行われるため不要 */
 
     const outputFilePath = await FileDialogUtil.selectOutputFilePath(
       "エフェクト適用後のファイル",
@@ -82,12 +85,8 @@
     );
 
     if (!outputFilePath) {
-      /* message dialog */
+      await message("ファイルが選択されていません。エフェクトの適用を中断します。");
       return;
-    }
-
-    if (inputFilePath == outputFilePath) {
-      /* overwrite message dialog */
     }
 
     await invoke("apply_effects", { inputFilePath, outputFilePath, pedals });
