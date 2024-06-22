@@ -1,6 +1,6 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
-  import { open, save } from "@tauri-apps/plugin-dialog";
+  import { FileDialogUtil } from "../lib/util/dialog/file";
 
   const VALID_EXTENSIONS = ["wav", "mp3"];
 
@@ -14,19 +14,12 @@
   let pedals: any[] = [];
 
   async function selectInputFile() {
-    const _inputFilePath = await open({
-      filters: [{ name: "", extensions: VALID_EXTENSIONS }],
-    });
-
-    if (_inputFilePath?.path) {
-      inputFilePath = _inputFilePath.path;
-    }
+    inputFilePath = await FileDialogUtil.selectInputFilePath(VALID_EXTENSIONS);
   }
 
   async function applyEffects() {
-    const outputFilePath = await save({
-      filters: [{ name: "", extensions: VALID_EXTENSIONS }],
-    });
+    const outputFilePath =
+      await FileDialogUtil.selectOutputFilePath(VALID_EXTENSIONS);
 
     if (outputFilePath) {
       await invoke("apply_effects", {
