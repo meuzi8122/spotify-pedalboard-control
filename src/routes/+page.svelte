@@ -11,8 +11,7 @@
   import ResetIcon from "$lib/component/icon/ResetIcon.svelte";
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
   import TrashIcon from "$lib/component/icon/TrashIcon.svelte";
-  import { VALID_MUSIC_FILE_EXTENSIONS } from "$lib/constant";
-  import type { Pedal } from "$lib/pedal-type";
+  import type { Pedal, PedalKind, SelectEvent } from "$lib/type";
   import { FileDialogUtil } from "$lib/util/dialog/file";
   import { invoke } from "@tauri-apps/api/core";
   import { message } from "@tauri-apps/plugin-dialog";
@@ -26,42 +25,32 @@
     selectPedal(pedals.slice(-1)[0].id);
   }
 
-  function addChorus() {
-    pedals = [
-      ...pedals,
-      { id: uuidv4(), name: "", kind: "chorus", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } },
-    ];
-    selectLatestPedal();
+  function pedalReducer(kind: PedalKind, id?: string): Pedal {
+    const _id = id ? id : uuidv4();
+
+    switch (kind) {
+      case "chorus":
+        return { id: _id, name: "", kind: "chorus", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } };
+      case "compressor":
+        return {
+          id: _id,
+          name: "",
+          kind: "compressor",
+          parameters: { ratio: 1, threshold: 1, release: 1, attack: 1 },
+        };
+      case "delay":
+        return { id: _id, name: "", kind: "delay", parameters: { time: 1, mix: 1, feedback: 1 } };
+      case "distortion":
+        return { id: _id, name: "", kind: "distortion", parameters: { gain: 1 } };
+      case "reverb":
+        return { id: _id, name: "", kind: "phaser", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } };
+      case "phaser":
+        return { id: _id, name: "", kind: "reverb", parameters: { roomSize: 1 } };
+    }
   }
 
-  function addCompressor() {
-    pedals = [
-      ...pedals,
-      { id: uuidv4(), name: "", kind: "compressor", parameters: { ratio: 1, threshold: 1, release: 1, attack: 1 } },
-    ];
-    selectLatestPedal();
-  }
-
-  function addDelay() {
-    pedals = [...pedals, { id: uuidv4(), name: "", kind: "delay", parameters: { time: 1, mix: 1, feedback: 1 } }];
-    selectLatestPedal();
-  }
-
-  function addDistortion() {
-    pedals = [...pedals, { id: uuidv4(), name: "", kind: "distortion", parameters: { gain: 1 } }];
-    selectLatestPedal();
-  }
-
-  function addPhaser() {
-    pedals = [
-      ...pedals,
-      { id: uuidv4(), name: "", kind: "phaser", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } },
-    ];
-    selectLatestPedal();
-  }
-
-  function addReverb() {
-    pedals = [...pedals, { id: uuidv4(), name: "", kind: "reverb", parameters: { roomSize: 1 } }];
+  function addPedal(kind: PedalKind) {
+    pedals = [...pedals, pedalReducer(kind)];
     selectLatestPedal();
   }
 
@@ -71,6 +60,16 @@
 
   function deleteAllPedals() {
     pedals = [];
+  }
+
+  async function updatePedal(event: SelectEvent) {
+    const index = pedals.findIndex((pedal) => pedal.id == selectedPedalId);
+
+    if (index) {
+      pedals[index] = pedalReducer(event.currentTarget.value as PedalKind);
+      pedals = pedals;
+      selectedPedalId = selectedPedalId;
+    }
   }
 
   async function applyEffects() {
@@ -118,17 +117,18 @@
   $: hasNoPedals = pedals.length == 0;
 
   const STEP_ICON_SIZE = 24;
+  const VALID_MUSIC_FILE_EXTENSIONS = [".mp3", ".wav"];
 </script>
 
 <div class="container mx-auto">
   <div class="flex mb-5">
     <div class="flex-1 join">
-      <button class="btn btn-outline join-item" on:click={addChorus}>Chorus</button>
-      <button class="btn btn-outline join-item" on:click={addCompressor}>Compressor</button>
-      <button class="btn btn-outline join-item" on:click={addDelay}>Delay</button>
-      <button class="btn btn-outline join-item" on:click={addDistortion}>Distortion</button>
-      <button class="btn btn-outline join-item" on:click={addPhaser}>Phaser</button>
-      <button class="btn btn-outline join-item" on:click={addReverb}>Reverb</button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("chorus")}>Chorus</button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("compressor")}>Compressor</button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("delay")}>Delay</button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("distortion")}>Distortion</button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("phaser")}>Phaser</button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("reverb")}>Reverb</button>
     </div>
     <div class="join flex-none">
       <button class="btn btn-outline btn-primary join-item" on:click={applyEffects} disabled={hasNoPedals}>
@@ -162,8 +162,15 @@
     </ul>
   </div>
   {#if selectedPedal}
-    <div class="mb-3">
-      <p>{selectedPedal.name}</p>
+    <div class="flex flex-col space-y-3 mb-3">
+      <select class="select select-bordered" bind:value={selectedPedal.kind} on:change={updatePedal}>
+        <option value="chorus">Chorus</option>
+        <option value="compressor">Compressor</option>
+        <option value="delay">Delay</option>
+        <option value="distortion">Distortion</option>
+        <option value="phaser">Phaser</option>
+        <option value="reverb">Reverb</option>
+      </select>
       {#if selectedPedal.kind == "chorus"}
         <ChorusParameterForm parameters={selectedPedal.parameters} />
       {:else if selectedPedal.kind == "compressor"}
