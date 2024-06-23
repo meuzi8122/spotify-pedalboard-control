@@ -2,7 +2,7 @@
   import "../style.css";
 </script>
 
-<div class="navbar bg-base-100">
+<div class="navbar mb-10">
   <a href="/" class="btn btn-ghost text-xl">PedalBoard</a>
 </div>
 

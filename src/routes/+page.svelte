@@ -105,7 +105,15 @@
       return;
     }
 
-    await invoke("save_effects", { inputFilePath, outputFilePath, pedals });
+    let isSuccess = true;
+
+    try {
+      await invoke("save_effects", { inputFilePath, outputFilePath, pedals });
+    } catch {
+      isSuccess = false;
+    }
+
+    await message(isSuccess ? "エフェクトを保存しました。" : "エフェクトの保存に失敗しました。");
   }
 
   let pedals: Pedal[] = [];
