@@ -1,17 +1,19 @@
 <script lang="ts">
-  import { invoke } from "@tauri-apps/api/core";
-  import { ask, message } from "@tauri-apps/plugin-dialog";
-  import { FileDialogUtil } from "$lib/util/dialog/file";
-  import { VALID_MUSIC_FILE_EXTENSIONS, PEDAL_KIND_MAP } from "../lib/constant";
   import ChorusParameterForm from "$lib/component/form/ChorusParameterForm.svelte";
   import CompressorParameterForm from "$lib/component/form/CompressorParameterForm.svelte";
-  import DistortionParameterForm from "$lib/component/form/DistortionParameterForm.svelte";
   import DelayParameterForm from "$lib/component/form/DelayParameterForm.svelte";
-  import ReverbParameterForm from "$lib/component/form/ReverbParameterForm.svelte";
+  import DistortionParameterForm from "$lib/component/form/DistortionParameterForm.svelte";
   import PhaserParameterForm from "$lib/component/form/PhaserParameterForm.svelte";
-  import type { Pedal } from "../lib/pedal-type";
-  import { v4 as uuidv4 } from "uuid";
+  import ReverbParameterForm from "$lib/component/form/ReverbParameterForm.svelte";
+  import PedalIcon from "$lib/component/icon/PedalIcon.svelte";
+  import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
   import TrashIcon from "$lib/component/icon/TrashIcon.svelte";
+  import { VALID_MUSIC_FILE_EXTENSIONS } from "$lib/constant";
+  import type { Pedal } from "$lib/pedal-type";
+  import { FileDialogUtil } from "$lib/util/dialog/file";
+  import { invoke } from "@tauri-apps/api/core";
+  import { message } from "@tauri-apps/plugin-dialog";
+  import { v4 as uuidv4 } from "uuid";
 
   function selectPedal(id: string) {
     selectedPedalId = id;
@@ -111,7 +113,7 @@
 
 <div class="container mx-auto">
   <div class="flex mb-5">
-    <div class="flex-1 join">
+    <div class="join">
       <button class="btn btn-outline join-item" on:click={addChorus}>Chorus</button>
       <button class="btn btn-outline join-item" on:click={addCompressor}>Compressor</button>
       <button class="btn btn-outline join-item" on:click={addDelay}>Delay</button>
@@ -120,22 +122,28 @@
       <button class="btn btn-outline join-item" on:click={addReverb}>Reverb</button>
     </div>
     <div class="flex-none">
-      <button class="btn" on:click={applyEffects} disabled={pedals.length == 0}>apply</button>
+      <button class="btn btn-outline btn-primary" on:click={applyEffects} disabled={pedals.length == 0}>
+        <SaveIcon />
+        エフェクトを保存
+      </button>
     </div>
   </div>
   <div class="overflow-x-auto mb-5">
-    <ul class="steps">
+    <ul class="steps my-4">
       <li data-content="" class="step">start</li>
       {#each pedals as { id, name, kind }, index}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-        <li class="step pedal-step" data-content={PEDAL_KIND_MAP[kind]} on:click={() => selectPedal(id)}></li>
+        <li class="step step-primary pedal-step" data-content="" on:click={() => selectPedal(id)}>
+          <PedalIcon width={24} height={24} />
+        </li>
       {/each}
       <li data-content="" class="step">end</li>
     </ul>
   </div>
   {#if selectedPedal}
-    <div>
+    <div class="mb-3">
+      <p>{selectedPedal.name}</p>
       {#if selectedPedal.kind == "chorus"}
         <ChorusParameterForm parameters={selectedPedal.parameters} />
       {:else if selectedPedal.kind == "compressor"}
@@ -150,16 +158,11 @@
         <ReverbParameterForm parameters={selectedPedal.parameters} />
       {/if}
     </div>
-    <div>
-      <button class="btn btn-error" on:click={deletePedal}>
+    <div class="flex justify-end">
+      <button class="btn btn-outline btn-error" on:click={deletePedal}>
         <TrashIcon />
+        エフェクターを削除
       </button>
     </div>
   {/if}
 </div>
-
-<style>
-  .pedal-step {
-    cursor: pointer;
-  }
-</style>
