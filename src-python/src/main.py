@@ -13,6 +13,6 @@ if __name__ == "__main__":
     )
 
     try:
-        generator.apply_effects()
+        generator.save_effects()
     except Exception as e:
         print(e)

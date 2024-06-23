@@ -13,7 +13,7 @@ class PedalBoardGenerator:
         self.pedals = pedals
         self.output_file_path = output_file_path
 
-    def apply_effects(self):
+    def save_effects(self):
         pedal_board = self._generate_pedal_board()
 
         with AudioFile(self.input_file_path) as input_file:
