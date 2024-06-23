@@ -27,43 +27,41 @@
   }
 
   function addChorus() {
-    pedals.push({ id: uuidv4(), name: "", kind: "chorus", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } });
-    pedals = pedals;
+    pedals = [
+      ...pedals,
+      { id: uuidv4(), name: "", kind: "chorus", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } },
+    ];
     selectLatestPedal();
   }
 
   function addCompressor() {
-    pedals.push({
-      id: uuidv4(),
-      name: "",
-      kind: "compressor",
-      parameters: { ratio: 1, threshold: 1, release: 1, attack: 1 },
-    });
-    pedals = pedals;
+    pedals = [
+      ...pedals,
+      { id: uuidv4(), name: "", kind: "compressor", parameters: { ratio: 1, threshold: 1, release: 1, attack: 1 } },
+    ];
     selectLatestPedal();
   }
 
   function addDelay() {
-    pedals.push({ id: uuidv4(), name: "", kind: "delay", parameters: { time: 1, mix: 1, feedback: 1 } });
-    pedals = pedals;
+    pedals = [...pedals, { id: uuidv4(), name: "", kind: "delay", parameters: { time: 1, mix: 1, feedback: 1 } }];
     selectLatestPedal();
   }
 
   function addDistortion() {
-    pedals.push({ id: uuidv4(), name: "", kind: "distortion", parameters: { gain: 1 } });
-    pedals = pedals;
+    pedals = [...pedals, { id: uuidv4(), name: "", kind: "distortion", parameters: { gain: 1 } }];
     selectLatestPedal();
   }
 
   function addPhaser() {
-    pedals.push({ id: uuidv4(), name: "", kind: "phaser", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } });
-    pedals = pedals;
+    pedals = [
+      ...pedals,
+      { id: uuidv4(), name: "", kind: "phaser", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } },
+    ];
     selectLatestPedal();
   }
 
   function addReverb() {
-    pedals.push({ id: uuidv4(), name: "", kind: "reverb", parameters: { roomSize: 1 } });
-    pedals = pedals;
+    pedals = [...pedals, { id: uuidv4(), name: "", kind: "reverb", parameters: { roomSize: 1 } }];
     selectLatestPedal();
   }
 
@@ -74,8 +72,6 @@
   function deleteAllPedals() {
     pedals = [];
   }
-
-  $: hasNoPedals = pedals.length == 0;
 
   async function applyEffects() {
     const inputFilePath = await FileDialogUtil.selectInputFilePath(
@@ -118,6 +114,8 @@
 
     return null;
   })();
+
+  $: hasNoPedals = pedals.length == 0;
 
   const STEP_ICON_SIZE = 24;
 </script>
