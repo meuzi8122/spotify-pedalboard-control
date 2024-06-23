@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.steps .step svg {
+  z-index: 2;
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.pedal-step {
+  cursor: pointer;
+}
