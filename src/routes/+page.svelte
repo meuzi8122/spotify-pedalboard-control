@@ -72,30 +72,27 @@
     }
   }
 
-  async function applyEffects() {
+  async function saveEffects() {
     const inputFilePath = await FileDialogUtil.selectInputFilePath(
       "エフェクトを適用するファイル",
       VALID_MUSIC_FILE_EXTENSIONS
     );
 
     if (!inputFilePath) {
-      await message("ファイルが選択されていません。エフェクトの適用を中断します。");
+      await message("ファイルが選択されていません。エフェクトの保存を中断します。");
       return;
     }
 
     /* ファイルの上書きチェックは自動で行われるため不要 */
 
-    const outputFilePath = await FileDialogUtil.selectOutputFilePath(
-      "エフェクト適用後のファイル",
-      VALID_MUSIC_FILE_EXTENSIONS
-    );
+    const outputFilePath = await FileDialogUtil.selectOutputFilePath("保存先ファイル", VALID_MUSIC_FILE_EXTENSIONS);
 
     if (!outputFilePath) {
-      await message("ファイルが選択されていません。エフェクトの適用を中断します。");
+      await message("ファイルが選択されていません。エフェクトの保存を中断します。");
       return;
     }
 
-    await invoke("apply_effects", { inputFilePath, outputFilePath, pedals });
+    await invoke("save_effects", { inputFilePath, outputFilePath, pedals });
   }
 
   let pedals: Pedal[] = [];
@@ -131,7 +128,7 @@
       <button class="btn btn-outline join-item" on:click={() => addPedal("reverb")}>Reverb</button>
     </div>
     <div class="join flex-none">
-      <button class="btn btn-outline btn-primary join-item" on:click={applyEffects} disabled={hasNoPedals}>
+      <button class="btn btn-outline btn-primary join-item" on:click={saveEffects} disabled={hasNoPedals}>
         <SaveIcon />
         エフェクトを保存
       </button>
