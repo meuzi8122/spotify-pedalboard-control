@@ -5,6 +5,8 @@
   import DistortionParameterForm from "$lib/component/form/DistortionParameterForm.svelte";
   import PhaserParameterForm from "$lib/component/form/PhaserParameterForm.svelte";
   import ReverbParameterForm from "$lib/component/form/ReverbParameterForm.svelte";
+  import GuitarIcon from "$lib/component/icon/GuitarIcon.svelte";
+  import HeadphoneIcon from "$lib/component/icon/HeadphoneIcon.svelte";
   import PedalIcon from "$lib/component/icon/PedalIcon.svelte";
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
   import TrashIcon from "$lib/component/icon/TrashIcon.svelte";
@@ -109,6 +111,8 @@
 
     return null;
   })();
+
+  const STEP_ICON_SIZE = 24;
 </script>
 
 <div class="container mx-auto">
@@ -130,15 +134,22 @@
   </div>
   <div class="overflow-x-auto mb-5">
     <ul class="steps my-4">
-      <li data-content="" class="step">start</li>
+      <li data-content="" class="step step-primary">
+        <GuitarIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+        IN
+      </li>
       {#each pedals as { id, name, kind }, index}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-        <li class="step step-primary pedal-step" data-content="" on:click={() => selectPedal(id)}>
-          <PedalIcon width={24} height={24} />
+        <li class="step step-secondary pedal-step" data-content="" on:click={() => selectPedal(id)}>
+          <PedalIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+          {index + 1}
         </li>
       {/each}
-      <li data-content="" class="step">end</li>
+      <li data-content="" class="step step-primary">
+        <HeadphoneIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+        OUT
+      </li>
     </ul>
   </div>
   {#if selectedPedal}
