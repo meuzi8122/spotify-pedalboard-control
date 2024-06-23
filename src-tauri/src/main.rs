@@ -5,7 +5,7 @@ mod pedal;
 use tauri_plugin_shell::ShellExt;
 
 #[tauri::command]
-async fn apply_effects(
+async fn save_effects(
     app: tauri::AppHandle,
     input_file_path: String,
     output_file_path: String,
@@ -29,7 +29,7 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![apply_effects])
+        .invoke_handler(tauri::generate_handler![save_effects])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
