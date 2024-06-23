@@ -30,22 +30,22 @@
 
     switch (kind) {
       case "chorus":
-        return { id: _id, name: "", kind: "chorus", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } };
+        return { id: _id, name: "", kind, parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } };
       case "compressor":
         return {
           id: _id,
           name: "",
-          kind: "compressor",
+          kind,
           parameters: { ratio: 1, threshold: 1, release: 1, attack: 1 },
         };
       case "delay":
-        return { id: _id, name: "", kind: "delay", parameters: { time: 1, mix: 1, feedback: 1 } };
+        return { id: _id, name: "", kind, parameters: { time: 1, mix: 1, feedback: 1 } };
       case "distortion":
-        return { id: _id, name: "", kind: "distortion", parameters: { gain: 1 } };
-      case "reverb":
-        return { id: _id, name: "", kind: "phaser", parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } };
+        return { id: _id, name: "", kind, parameters: { gain: 1 } };
       case "phaser":
-        return { id: _id, name: "", kind: "reverb", parameters: { roomSize: 1 } };
+        return { id: _id, name: "", kind, parameters: { rate: 1, depth: 1, feedback: 1, mix: 1 } };
+      case "reverb":
+        return { id: _id, name: "", kind, parameters: { roomSize: 1 } };
     }
   }
 
