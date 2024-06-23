@@ -8,6 +8,7 @@
   import GuitarIcon from "$lib/component/icon/GuitarIcon.svelte";
   import HeadphoneIcon from "$lib/component/icon/HeadphoneIcon.svelte";
   import PedalIcon from "$lib/component/icon/PedalIcon.svelte";
+  import ResetIcon from "$lib/component/icon/ResetIcon.svelte";
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
   import TrashIcon from "$lib/component/icon/TrashIcon.svelte";
   import { VALID_MUSIC_FILE_EXTENSIONS } from "$lib/constant";
@@ -70,6 +71,12 @@
     pedals = pedals.filter((pedal) => pedal.id != selectedPedalId);
   }
 
+  function deleteAllPedals() {
+    pedals = [];
+  }
+
+  $: hasNoPedals = pedals.length == 0;
+
   async function applyEffects() {
     const inputFilePath = await FileDialogUtil.selectInputFilePath(
       "エフェクトを適用するファイル",
@@ -117,7 +124,7 @@
 
 <div class="container mx-auto">
   <div class="flex mb-5">
-    <div class="join">
+    <div class="flex-1 join">
       <button class="btn btn-outline join-item" on:click={addChorus}>Chorus</button>
       <button class="btn btn-outline join-item" on:click={addCompressor}>Compressor</button>
       <button class="btn btn-outline join-item" on:click={addDelay}>Delay</button>
@@ -125,10 +132,14 @@
       <button class="btn btn-outline join-item" on:click={addPhaser}>Phaser</button>
       <button class="btn btn-outline join-item" on:click={addReverb}>Reverb</button>
     </div>
-    <div class="flex-none">
-      <button class="btn btn-outline btn-primary" on:click={applyEffects} disabled={pedals.length == 0}>
+    <div class="join flex-none">
+      <button class="btn btn-outline btn-primary join-item" on:click={applyEffects} disabled={hasNoPedals}>
         <SaveIcon />
         エフェクトを保存
+      </button>
+      <button class="btn btn-outline btn-error join-item" on:click={deleteAllPedals} disabled={hasNoPedals}>
+        <ResetIcon />
+        エフェクトをリセット
       </button>
     </div>
   </div>
@@ -138,7 +149,7 @@
         <GuitarIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
         IN
       </li>
-      {#each pedals as { id, name, kind }, index}
+      {#each pedals as { id }, index}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
         <li class="step step-secondary pedal-step" data-content="" on:click={() => selectPedal(id)}>
