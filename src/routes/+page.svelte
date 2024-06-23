@@ -18,7 +18,15 @@
   import { v4 as uuidv4 } from "uuid";
 
   function selectPedal(id: string) {
-    selectedPedalId = id;
+    if (id == null) {
+      return null;
+    }
+
+    const _selectedPedal = pedals.find((pedal) => pedal.id == id);
+
+    if (_selectedPedal) {
+      selectedPedal = _selectedPedal;
+    }
   }
 
   function selectLatestPedal() {
@@ -55,7 +63,9 @@
   }
 
   function deletePedal() {
-    pedals = pedals.filter((pedal) => pedal.id != selectedPedalId);
+    if (selectedPedal != null) {
+      pedals = pedals.filter((pedal) => pedal.id != selectedPedal.id);
+    }
   }
 
   function deleteAllPedals() {
@@ -63,12 +73,15 @@
   }
 
   async function updatePedal(event: SelectEvent) {
-    const index = pedals.findIndex((pedal) => pedal.id == selectedPedalId);
+    const index = pedals.findIndex((pedal) => pedal.id == selectedPedal.id);
+
+    if (selectedPedal == null) {
+      return;
+    }
 
     if (index) {
       pedals[index] = pedalReducer(event.currentTarget.value as PedalKind);
       pedals = pedals;
-      selectedPedalId = selectedPedalId;
     }
   }
 
@@ -97,19 +110,7 @@
 
   let pedals: Pedal[] = [];
 
-  let selectedPedalId: string | null = null;
-  $: selectedPedal = (() => {
-    if (selectedPedalId == null) {
-      return null;
-    }
-
-    const _selectedPedal = pedals.find((pedal) => pedal.id == selectedPedalId);
-    if (_selectedPedal) {
-      return _selectedPedal;
-    }
-
-    return null;
-  })();
+  let selectedPedal: Pedal | null = null;
 
   $: hasNoPedals = pedals.length == 0;
 
