@@ -8,6 +8,7 @@
   import GuitarIcon from "$lib/component/icon/GuitarIcon.svelte";
   import HeadphoneIcon from "$lib/component/icon/HeadphoneIcon.svelte";
   import PedalIcon from "$lib/component/icon/PedalIcon.svelte";
+  import PlusIcon from "$lib/component/icon/PlusIcon.svelte";
   import ResetIcon from "$lib/component/icon/ResetIcon.svelte";
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
   import TrashIcon from "$lib/component/icon/TrashIcon.svelte";
@@ -108,12 +109,12 @@
     let isSuccess = true;
 
     try {
-      await invoke("save_effects", { inputFilePath, outputFilePath, pedals });
+      const res = await invoke("save_effects", { inputFilePath, outputFilePath, pedals });
     } catch {
       isSuccess = false;
     }
 
-    await message(isSuccess ? "エフェクトを保存しました。" : "エフェクトの保存に失敗しました。");
+    await message(isSuccess ? "エフェクトを保存しました。" : `エフェクトの保存に失敗しました。${res}`);
   }
 
   let pedals: Pedal[] = [];
@@ -127,23 +128,39 @@
 </script>
 
 <div class="container mx-auto">
-  <div class="flex mb-5">
-    <div class="flex-1 join">
-      <button class="btn btn-outline join-item" on:click={() => addPedal("chorus")}>Chorus</button>
-      <button class="btn btn-outline join-item" on:click={() => addPedal("compressor")}>Compressor</button>
-      <button class="btn btn-outline join-item" on:click={() => addPedal("delay")}>Delay</button>
-      <button class="btn btn-outline join-item" on:click={() => addPedal("distortion")}>Distortion</button>
-      <button class="btn btn-outline join-item" on:click={() => addPedal("phaser")}>Phaser</button>
-      <button class="btn btn-outline join-item" on:click={() => addPedal("reverb")}>Reverb</button>
-    </div>
-    <div class="join flex-none">
-      <button class="btn btn-outline btn-primary join-item" on:click={saveEffects} disabled={hasNoPedals}>
-        <SaveIcon />
-        エフェクトを保存
+  <div class="flex justify-center">
+    <div class="join">
+      <!-- <button class="btn btn-outline join-item" on:click={() => addPedal("chorus")}>
+        <PlusIcon />
+        Chorus
       </button>
-      <button class="btn btn-outline btn-error join-item" on:click={deleteAllPedals} disabled={hasNoPedals}>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("compressor")}>
+        <PlusIcon />
+        Compressor
+      </button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("delay")}>
+        <PlusIcon />
+        Delay
+      </button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("distortion")}>
+        <PlusIcon />
+        Distortion
+      </button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("phaser")}>
+        <PlusIcon />
+        Phaser
+      </button>
+      <button class="btn btn-outline join-item" on:click={() => addPedal("reverb")}>
+        <PlusIcon />
+        Reverb
+      </button> -->
+      <button class="btn btn-outline join-item" on:click={saveEffects}>
+        <SaveIcon />
+        Save
+      </button>
+      <button class="btn btn-outline join-item" on:click={deleteAllPedals}>
         <ResetIcon />
-        エフェクトをリセット
+        Reset
       </button>
     </div>
   </div>
