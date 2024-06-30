@@ -48,24 +48,26 @@
 
 <div class="container mx-auto">
   <div class="overflow-x-auto mb-5">
-    <ul class="steps my-4">
-      <li data-content="" class="step step-primary">
-        <GuitarIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
-        IN
-      </li>
-      {#each $pedals as { id }, index}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-        <li class="step step-secondary pedal-step" data-content="" on:click={() => selectPedal(id)}>
-          <PedalIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
-          {index + 1}
+    <div class="flex justify-center">
+      <ul class="steps my-4">
+        <li data-content="" class="step step-primary">
+          <GuitarIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+          IN
         </li>
-      {/each}
-      <li data-content="" class="step step-primary">
-        <HeadphoneIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
-        OUT
-      </li>
-    </ul>
+        {#each $pedals as { id }, index}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+          <li class="step step-secondary pedal-step" data-content="" on:click={() => selectPedal(id)}>
+            <PedalIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+            {index + 1}
+          </li>
+        {/each}
+        <li data-content="" class="step step-primary">
+          <HeadphoneIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+          OUT
+        </li>
+      </ul>
+    </div>
   </div>
   {#if selectedPedal}
     <div class="flex flex-col space-y-3 mb-3">

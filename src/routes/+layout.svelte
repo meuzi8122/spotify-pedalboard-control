@@ -42,9 +42,9 @@
   }
 </script>
 
-<div class="navbar bg-base-100">
+<div class="navbar bg-base-100 mb-8">
   <div class="flex-1">
-    <a class="btn btn-ghost text-xl">PedalBoard</a>
+    <a href="/" class="btn btn-ghost text-xl">PedalBoard</a>
   </div>
   <div class="flex-none">
     <label for="my-drawer-4" class="btn btn-square btn-ghost">
