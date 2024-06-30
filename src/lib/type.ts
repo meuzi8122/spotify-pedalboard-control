@@ -8,7 +8,3 @@ export type Pedal = {
 };
 
 export type PedalKind = "chorus" | "compressor" | "delay" | "distortion" | "phaser" | "reverb";
-
-export type SelectEvent = {
-  currentTarget: HTMLSelectElement;
-};
