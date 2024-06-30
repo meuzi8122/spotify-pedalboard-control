@@ -123,7 +123,7 @@
   $: hasNoPedals = pedals.length == 0;
 
   const STEP_ICON_SIZE = 24;
-  const VALID_MUSIC_FILE_EXTENSIONS = [".mp3", ".wav"];
+  const VALID_MUSIC_FILE_EXTENSIONS = ["mp3", "wav"];
 </script>
 
 <div class="container mx-auto">
