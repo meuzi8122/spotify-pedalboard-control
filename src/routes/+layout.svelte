@@ -6,6 +6,9 @@
   import { VALID_MUSIC_FILE_EXTENSIONS } from "$lib/constant";
   import MenuIcon from "$lib/component/icon/MenuIcon.svelte";
   import "../style.css";
+  import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
+  import ResetIcon from "$lib/component/icon/ResetIcon.svelte";
+  import PlusIcon from "$lib/component/icon/PlusIcon.svelte";
 
   async function saveEffects() {
     const inputFilePath = await FileDialogUtil.selectInputFilePath(
@@ -58,14 +61,14 @@
   <div class="drawer-side">
     <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
     <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-      <li><a on:click={saveEffects}>Save</a></li>
-      <li><a on:click={deleteAllPedals}>Rest</a></li>
-      <li><a on:click={() => addPedal("chorus")}>Chorus</a></li>
-      <li><a on:click={() => addPedal("compressor")}>Compressor</a></li>
-      <li><a on:click={() => addPedal("delay")}>Delay</a></li>
-      <li><a on:click={() => addPedal("distortion")}>Distortion</a></li>
-      <li><a on:click={() => addPedal("phaser")}>Phaser</a></li>
-      <li><a on:click={() => addPedal("reverb")}>Reverb</a></li>
+      <li><a on:click={saveEffects}><SaveIcon />Save</a></li>
+      <li><a on:click={deleteAllPedals}><ResetIcon />Reset</a></li>
+      <li><a on:click={() => addPedal("chorus")}><PlusIcon />Chorus</a></li>
+      <li><a on:click={() => addPedal("compressor")}><PlusIcon />Compressor</a></li>
+      <li><a on:click={() => addPedal("delay")}><PlusIcon />Delay</a></li>
+      <li><a on:click={() => addPedal("distortion")}><PlusIcon />Distortion</a></li>
+      <li><a on:click={() => addPedal("phaser")}><PlusIcon />Phaser</a></li>
+      <li><a on:click={() => addPedal("reverb")}><PlusIcon />Reverb</a></li>
     </ul>
   </div>
 </div>
