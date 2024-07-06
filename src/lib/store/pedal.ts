@@ -61,10 +61,12 @@ export function deletePedal(id: string) {
   pedals.update((_pedals) => {
     const pedalIndex = _pedals.findIndex((_pedal) => _pedal.id == id);
 
-    if (pedalIndex) {
-      _pedals = _pedals.filter((_pedal) => _pedal.id != id);
+    /* if (pedalIndex){} だと、pedalIndex=0でfalseになるためNG */
+    if (pedalIndex == null) {
+      return _pedals;
     }
 
+    _pedals = _pedals.filter((_pedal) => _pedal.id != id);
     return _pedals;
   });
 }

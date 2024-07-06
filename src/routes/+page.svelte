@@ -13,20 +13,13 @@
   import type { Pedal } from "$lib/store/pedal";
 
   function selectPedal(id: string) {
-    if (id == null) {
-      return null;
-    }
-
     const _selectedPedal = $pedals.find((pedal) => pedal.id == id);
 
     if (_selectedPedal) {
       selectedPedal = _selectedPedal;
+    } else {
+      selectedPedal = null;
     }
-  }
-
-  /* TODO: ペダルが追加されたときも実行したい */
-  function selectLatestPedal() {
-    selectPedal($pedals.slice(-1)[0].id);
   }
 
   function handleUpdatePedal() {
@@ -38,7 +31,7 @@
   function handleDeletePedal() {
     if (selectedPedal) {
       deletePedal(selectedPedal.id);
-      selectLatestPedal();
+      selectedPedal = null;
     }
   }
 
