@@ -24,6 +24,7 @@
     }
   }
 
+  /* TODO: ペダルが追加されたときも実行したい */
   function selectLatestPedal() {
     selectPedal($pedals.slice(-1)[0].id);
   }
