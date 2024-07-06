@@ -10,7 +10,7 @@
   import PedalIcon from "$lib/component/icon/PedalIcon.svelte";
   import TrashIcon from "$lib/component/icon/TrashIcon.svelte";
   import { deletePedal, pedals, updatePedal } from "$lib/store/pedal";
-  import type { Pedal } from "$lib/type";
+  import type { Pedal } from "$lib/store/pedal";
 
   function selectPedal(id: string) {
     if (id == null) {

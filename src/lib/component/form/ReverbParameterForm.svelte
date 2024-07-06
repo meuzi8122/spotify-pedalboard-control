@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Pedal } from "$lib/type";
+  import type { Pedal } from "$lib/store/pedal";
 
   export let parameters: Pedal["parameters"];
 </script>

@@ -1,9 +1,19 @@
-import type { Pedal, PedalKind } from "$lib/type";
 import { writable } from "svelte/store";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
+
+type PedalKind = "chorus" | "compressor" | "delay" | "distortion" | "phaser" | "reverb";
+
+export type Pedal = {
+  id: string;
+  name: string;
+  kind: PedalKind;
+  parameters: {
+    [key: string]: number;
+  };
+};
 
 function pedalReducer(kind: PedalKind, id?: string): Pedal {
-  const _id = id ? id : uuidv4();
+  const _id = id ? id : randomUUID();
 
   switch (kind) {
     case "chorus":
