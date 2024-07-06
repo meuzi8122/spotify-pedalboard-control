@@ -57,7 +57,12 @@
         {#each $pedals as { id }, index}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-          <li class="step step-secondary pedal-step" data-content="" on:click={() => selectPedal(id)}>
+          <li
+            class="step step-secondary pedal-step"
+            data-content=""
+            data-testid="pedal-step"
+            on:click={() => selectPedal(id)}
+          >
             <PedalIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
             {index + 1}
           </li>
