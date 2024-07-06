@@ -102,7 +102,7 @@
     <div class="flex justify-end">
       <button class="btn btn-outline btn-error" on:click={handleDeletePedal}>
         <TrashIcon />
-        エフェクターを削除
+        Delete
       </button>
     </div>
   {/if}
