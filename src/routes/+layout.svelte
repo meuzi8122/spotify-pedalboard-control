@@ -35,7 +35,7 @@
     let error;
 
     try {
-      await invoke("save_effects", { inputFilePath, outputFilePath, $pedals });
+      await invoke("save_pedal_board", { inputFilePath, outputFilePath, $pedals });
     } catch (e) {
       isSuccess = false;
       error = e;

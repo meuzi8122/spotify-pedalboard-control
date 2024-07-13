@@ -13,6 +13,6 @@ if __name__ == "__main__":
     )
 
     try:
-        generator.save_effects()
+        generator.save_pedal_board()
     except Exception as e:
         print(e)
