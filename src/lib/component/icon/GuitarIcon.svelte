@@ -1,11 +1,10 @@
 <script lang="ts">
-  export let width: number;
-  export let height: number;
+  import { STEP_ICON_SIZE } from "$lib/constant";
 </script>
 
 <svg
-  {width}
-  {height}
+  width={STEP_ICON_SIZE}
+  height={STEP_ICON_SIZE}
   viewBox="0 0 64 64"
   version="1.1"
   xmlns="http://www.w3.org/2000/svg"

@@ -82,8 +82,6 @@
 
     await message(`エフェクトを適用しました。(保存先: ${outputFilePath})`);
   }
-
-  const STEP_ICON_SIZE = 26;
 </script>
 
 <div class="container mx-auto">
@@ -105,7 +103,7 @@
     <div class="flex justify-center">
       <ul class="steps my-4 py-2">
         <li data-content="" class="step step-primary after:!w-12 after:!h-12 after:text-3xl">
-          <GuitarIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+          <GuitarIcon />
           IN
         </li>
         {#each pedals as pedal, index}
@@ -115,12 +113,12 @@
             data-testid="pedal-step"
             on:click={() => selectPedal(pedal)}
           >
-            <PedalIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+            <PedalIcon />
             {index + 1}
           </li>
         {/each}
         <li data-content="" class="step step-primary after:!w-12 after:!h-12 after:text-3xl">
-          <HeadphoneIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
+          <HeadphoneIcon />
           OUT
         </li>
       </ul>
