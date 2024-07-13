@@ -9,6 +9,7 @@
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
   import ResetIcon from "$lib/component/icon/ResetIcon.svelte";
   import PlusIcon from "$lib/component/icon/PlusIcon.svelte";
+  import EditIcon from "$lib/component/icon/EditIcon.svelte";
 
   async function saveEffects() {
     const inputFilePath = await FileDialogUtil.selectInputFilePath(
@@ -31,14 +32,16 @@
     }
 
     let isSuccess = true;
+    let error;
 
     try {
-      await invoke("save_effects", { inputFilePath, outputFilePath, pedals });
-    } catch {
+      await invoke("save_effects", { inputFilePath, outputFilePath, $pedals });
+    } catch (e) {
       isSuccess = false;
+      error = e;
     }
 
-    await message(isSuccess ? "エフェクトを保存しました。" : `エフェクトの保存に失敗しました。`);
+    await message(isSuccess ? "エフェクトを保存しました。" : `エフェクトの保存に失敗しました。${error}`);
   }
 </script>
 
@@ -61,14 +64,15 @@
   <div class="drawer-side">
     <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
     <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-      <li><a on:click={saveEffects}><SaveIcon />Save</a></li>
+      <!-- <li><a on:click={saveEffects}><SaveIcon />Save</a></li>
       <li><a on:click={deleteAllPedals}><ResetIcon />Reset</a></li>
       <li><a on:click={() => addPedal("chorus")}><PlusIcon />Chorus</a></li>
       <li><a on:click={() => addPedal("compressor")}><PlusIcon />Compressor</a></li>
       <li><a on:click={() => addPedal("delay")}><PlusIcon />Delay</a></li>
       <li><a on:click={() => addPedal("distortion")}><PlusIcon />Distortion</a></li>
       <li><a on:click={() => addPedal("phaser")}><PlusIcon />Phaser</a></li>
-      <li><a on:click={() => addPedal("reverb")}><PlusIcon />Reverb</a></li>
+      <li><a on:click={() => addPedal("reverb")}><PlusIcon />Reverb</a></li> -->
+      <li><a href="/"><EditIcon />Edit</a></li>
     </ul>
   </div>
 </div>
