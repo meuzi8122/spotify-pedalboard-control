@@ -1,6 +1,6 @@
 import { open, save } from "@tauri-apps/plugin-dialog";
 
-export class FileDialogUtil {
+export class DialogUtil {
   static async selectInputFilePath(name: string, extensions: string[]): Promise<string | null> {
     const inputFilePath = await open({ filters: [{ name, extensions }] });
 
