@@ -37,14 +37,14 @@
 
   let selectedPedal: Pedal | null = null;
 
-  const STEP_ICON_SIZE = 24;
+  const STEP_ICON_SIZE = 26;
 </script>
 
 <div class="container mx-auto">
   <div class="overflow-x-auto mb-5">
     <div class="flex justify-center">
-      <ul class="steps my-4">
-        <li data-content="" class="step step-primary">
+      <ul class="steps my-4 py-2">
+        <li data-content="" class="step step-primary after:!w-12 after:!h-12 after:text-3xl">
           <GuitarIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
           IN
         </li>
@@ -52,7 +52,7 @@
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
           <li
-            class="step step-secondary pedal-step"
+            class="step step-secondary pedal-step after:!w-12 after:!h-12 after:text-3xl"
             data-content=""
             data-testid="pedal-step"
             on:click={() => selectPedal(id)}
@@ -61,7 +61,7 @@
             {index + 1}
           </li>
         {/each}
-        <li data-content="" class="step step-primary">
+        <li data-content="" class="step step-primary after:!w-12 after:!h-12 after:text-3xl">
           <HeadphoneIcon width={STEP_ICON_SIZE} height={STEP_ICON_SIZE} />
           OUT
         </li>
