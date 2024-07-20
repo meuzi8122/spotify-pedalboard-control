@@ -1,5 +1,5 @@
 [package]
-name = "pedalboard"
+name = "spotify-pedalboard-control"
 version = "0.0.0"
 description = "A Tauri App"
 authors = ["you"]

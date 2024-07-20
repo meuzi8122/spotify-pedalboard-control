@@ -1,5 +1,5 @@
 {
-  "productName": "pedalboard",
+  "productName": "spotify-pedalboard-control",
   "version": "0.0.0",
   "identifier": "com.tauri.dev",
   "build": {
@@ -11,7 +11,7 @@
   "app": {
     "windows": [
       {
-        "title": "pedalboard",
+        "title": "spotify-pedalboard-control",
         "width": 800,
         "height": 600
       }
@@ -23,15 +23,7 @@
   "bundle": {
     "active": true,
     "targets": "all",
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ],
-    "externalBin": [
-      "../src-python/dist/main"
-    ]
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "externalBin": ["../src-python/dist/main"]
   }
 }
