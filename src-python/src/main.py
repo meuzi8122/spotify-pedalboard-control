@@ -4,15 +4,20 @@ import sys
 from src.pedal_board_generator import PedalBoardGenerator
 
 if __name__ == "__main__":
-    _, input_file_path, pedals, output_file_path = sys.argv
+    _, source_path, start_time, end_time, pedals, isSaved = sys.argv
 
-    generator = PedalBoardGenerator(
-        input_file_path=input_file_path,
-        pedals=json.loads(pedals),
-        output_file_path=output_file_path,
-    )
-
-    try:
-        generator.save_effects()
-    except Exception as e:
-        print(e)
+    if isSaved:
+        PedalBoardGenerator.save(
+            source_path=source_path,
+            output_path=source_path,
+            start_time=start_time,
+            end_time=end_time,
+            pedals=json.loads(pedals),
+        )
+    else:
+        PedalBoardGenerator.play(
+            source_path=source_path,
+            start_time=start_time,
+            end_time=end_time,
+            pedals=json.loads(pedals),
+        )

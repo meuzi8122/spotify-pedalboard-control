@@ -13,6 +13,7 @@
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
   import type { Kind, Pedal } from "$lib/type";
   import { invoke } from "@tauri-apps/api/core";
+  import { message } from "@tauri-apps/plugin-dialog";
   import { v4 } from "uuid";
 
   function pedalReducer(kind: Kind, id?: string): Pedal {
@@ -52,11 +53,25 @@
   }
 
   async function play() {
-    await invoke("play", { sourcePath: "", pedals, startTime, endTime });
+    try {
+      await invoke("call_pedal_board_generator", {
+        sourcePath: "",
+        pedals,
+        startTime,
+        endTime,
+        isSaved: false,
+      });
+    } catch (err) {
+      await message(`${err}`);
+    }
   }
 
   async function save() {
-    await invoke("save", { sourcePath: "", pedals, startTime, endTime });
+    try {
+      await invoke("call_pedal_board_generator", { sourcePath: "", pedals, startTime, endTime, isSaved: true });
+    } catch (err) {
+      await message(`${err}`);
+    }
   }
 
   let startTime: string = "00:00";

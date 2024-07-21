@@ -6,7 +6,7 @@ use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Pedal {
-    name: String,
+    id: String,
     kind: String,
     parameters: HashMap<String, isize>,
 }

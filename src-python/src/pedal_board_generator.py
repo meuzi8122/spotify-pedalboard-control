@@ -116,9 +116,3 @@ class PedalBoardGenerator:
                     pedal_board.append(Reverb(room_size=room_size))
 
         return pedal_board
-
-
-if __name__ == "__main__":
-    PedalBoardGenerator.play(
-        source_path="C:\\Users\\umeum\\Downloads\\01 ジャンジャンジャージャジャンジャンジャ(A).wav"
-    )
