@@ -11,6 +11,7 @@
   import PlusIcon from "$lib/component/icon/PlusIcon.svelte";
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
   import type { Kind, Pedal } from "$lib/type";
+  import { invoke } from "@tauri-apps/api/core";
   import { v4 } from "uuid";
 
   function pedalReducer(kind: Kind, id?: string, name?: string): Pedal {
@@ -50,9 +51,13 @@
     pedals = pedals.filter((pedal) => pedal.id != id);
   }
 
-  function play() {}
+  async function play() {
+    await invoke("play", { sourcePath: "", pedals, startTime, endTime });
+  }
 
-  function save() {}
+  async function save() {
+    await invoke("save", { sourcePath: "", pedals, startTime, endTime });
+  }
 
   let startTime: string = "00:00";
   let endTime: string = "00:00";
@@ -85,7 +90,7 @@
       </div>
     </div>
 
-    {#each pedals as pedal}
+    {#each pedals as pedal, index}
       <div class="card bg-base-100 w-full shrink-0 shadow-2xl">
         <div class="card-body">
           <div class="card-actions justify-end">
@@ -93,7 +98,7 @@
               <DeleteIcon />
             </button>
           </div>
-          <h2 class="card-title">Parameters</h2>
+          <h2 class="card-title">Pedal {index + 1}</h2>
           <div class="flex flex-col">
             <div class="flex space-x-3">
               {#if pedal.kind == "chorus"}
