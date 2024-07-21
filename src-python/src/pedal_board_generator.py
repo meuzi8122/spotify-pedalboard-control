@@ -1,43 +1,50 @@
-from pedalboard import Chorus, Compressor, Delay, Distortion, Pedalboard, Phaser, Reverb
+import tempfile
+import librosa
+import sounddevice as sd
+from pedalboard import Chorus, Compressor, Delay, Distortion, Limiter, Pedalboard, Phaser, Reverb
 from pedalboard.io import AudioFile
 
 
 class PedalBoardGenerator:
-    def __init__(
-        self,
-        input_file_path: str,
-        pedals: list[dict],
-        output_file_path: str,
-    ) -> None:
-        self.input_file_path = input_file_path
-        self.pedals = pedals
-        self.output_file_path = output_file_path
+    @classmethod
+    def save(cls, pedals: list[dict], start_time: str, end_time: str, source_path: str, output_path: str | None = None):
+        if not output_path:
+            output_path = source_path
 
-    def save_effects(self):
-        pedal_board = self._generate_pedal_board()
+        pedal_board = cls._generate_pedal_board(pedals=pedals)
 
-        with AudioFile(self.input_file_path) as input_file:
+        with AudioFile(source_path) as source_file:
             with AudioFile(
-                self.output_file_path,
+                output_path,
                 "w",
-                input_file.samplerate,
-                input_file.num_channels,
+                source_file.samplerate,
+                source_file.num_channels,
             ) as output_file:
                 # 秒単位でエフェクトを適用する
-                while input_file.tell() < input_file.frames:
-                    chunk = input_file.read(input_file.samplerate)
-                    effected = pedal_board(chunk, input_file.samplerate, reset=False)
+                while source_file.tell() < source_file.frames:
+                    chunk = source_file.read(source_file.samplerate)
+                    effected = pedal_board(chunk, source_file.samplerate, reset=False)
                     output_file.write(effected)
 
-        print(f"{self.output_file_path}を出力しました。")
+    @classmethod
+    def play(cls, pedals: list[dict], start_time: str, end_time: str, source_path: str):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            extension = source_path.split(".")[-1]
+            output_path = f"{tmp_dir}/tmp.{extension}"
 
-    def _generate_pedal_board(self) -> Pedalboard:
+            cls.save(pedals=pedals, start_time=start_time, end_time=end_time, source_path=source_path, output_path=output_path)
+
+            audio, sr = librosa.load(path=output_path)
+            sd.play(audio, sr)
+            sd.wait()
+
+    @classmethod
+    def _generate_pedal_board(pedals: list[dict]) -> Pedalboard:
         pedal_board = Pedalboard()
 
-        for pedal in self.pedals:
+        for pedal in pedals:
             match pedal:
                 case {
-                    "name": name,
                     "kind": "chorus",
                     "parameters": {
                         "rate": rate,
@@ -48,7 +55,6 @@ class PedalBoardGenerator:
                 }:
                     pedal_board.append(Chorus(rate_hz=rate, depth=depth, feedback=feedback, mix=mix))
                 case {
-                    "name": name,
                     "kind": "compressor",
                     "parameters": {
                         "threshold": threshold,
@@ -66,7 +72,6 @@ class PedalBoardGenerator:
                         )
                     )
                 case {
-                    "name": name,
                     "kind": "delay",
                     "parameters": {"feedback": feedback, "time": time, "mix": mix},
                 }:
@@ -78,13 +83,16 @@ class PedalBoardGenerator:
                         )
                     )
                 case {
-                    "name": name,
                     "kind": "distortion",
                     "parameters": {"gain": gain},
                 }:
                     pedal_board.append(Distortion(drive_db=gain))
                 case {
-                    "name": name,
+                    "kind": "limiter",
+                    "parameters": {"threshold": threshold, "release": release}
+                }:
+                    pedal_board.append(Limiter(threshold_db=threshold, release_ms=release))
+                case {
                     "kind": "phaser",
                     "parameters": {
                         "rate": rate,
@@ -102,10 +110,15 @@ class PedalBoardGenerator:
                         )
                     )
                 case {
-                    "name": name,
                     "kind": "reverb",
                     "parameters": {"roomSize": room_size},
                 }:
                     pedal_board.append(Reverb(room_size=room_size))
 
         return pedal_board
+
+
+if __name__ == "__main__":
+    PedalBoardGenerator.play(
+        source_path="C:\\Users\\umeum\\Downloads\\01 ジャンジャンジャージャジャンジャンジャ(A).wav"
+    )
