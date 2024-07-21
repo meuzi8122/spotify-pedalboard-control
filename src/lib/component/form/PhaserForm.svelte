@@ -1,19 +1,16 @@
 <script lang="ts">
+  import type { Kind, Pedal } from "$lib/type";
+  import KindControl from "./control/KindControl.svelte";
   import ParameterControl from "./control/ParameterControl.svelte";
 
-  export let parameters: { [key: string]: number };
+  export let kind: Kind;
+  export let parameters: Pedal["parameters"];
+
+  export let handleChange: (id: string) => void;
 </script>
 
-<div class="card bg-base-100 w-full shrink-0 shadow-2xl">
-  <div class="card-body">
-    <h2 class="card-title">Phaser Parameters</h2>
-    <div class="flex flex-col">
-      <div class="flex space-x-3">
-        <ParameterControl label="Rate" bind:value={parameters.rate} unit="Hz" />
-        <ParameterControl label="Depth" bind:value={parameters.depth} />
-        <ParameterControl label="Feedback" bind:value={parameters.feedback} />
-        <ParameterControl label="Mix" bind:value={parameters.mix} />
-      </div>
-    </div>
-  </div>
-</div>
+<KindControl bind:kind {handleChange} />
+<ParameterControl label="Rate" bind:value={parameters.rate} unit="Hz" />
+<ParameterControl label="Depth" bind:value={parameters.depth} />
+<ParameterControl label="Feedback" bind:value={parameters.feedback} />
+<ParameterControl label="Mix" bind:value={parameters.mix} />

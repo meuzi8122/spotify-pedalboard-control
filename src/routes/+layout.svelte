@@ -1,15 +1,6 @@
 <script lang="ts">
   import MenuIcon from "$lib/component/icon/MenuIcon.svelte";
   import "../style.css";
-
-  const PATHS = [
-    { name: "Chorus", href: "/effects/chorus" },
-    { name: "Compressor", href: "/effects/compressor" },
-    { name: "Delay", href: "/effects/delay" },
-    { name: "Limiter", href: "/effects/limiter" },
-    { name: "Phaser", href: "/effects/phaser" },
-    { name: "Reverb", href: "/effects/reverb" },
-  ];
 </script>
 
 <div class="navbar bg-base-100 mb-8">
@@ -31,9 +22,7 @@
   <div class="drawer-side">
     <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
     <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-      {#each PATHS as { href, name }}
-        <li><a {href}>{name}</a></li>
-      {/each}
+      <li><a href="/">PedalBoard</a></li>
     </ul>
   </div>
 </div>
