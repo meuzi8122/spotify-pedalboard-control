@@ -8,6 +8,7 @@
     { label: "Chorus", kind: "chorus" },
     { label: "Compressor", kind: "compressor" },
     { label: "Delay", kind: "delay" },
+    { label: "Distortion", kind: "distortion" },
     { label: "Limiter", kind: "limiter" },
     { label: "Phaser", kind: "phaser" },
     { label: "Reverb", kind: "reverb" },

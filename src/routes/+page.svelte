@@ -3,6 +3,7 @@
   import CompressorForm from "$lib/component/form/CompressorForm.svelte";
   import TimeControl from "$lib/component/form/control/TimeControl.svelte";
   import DelayForm from "$lib/component/form/DelayForm.svelte";
+  import DistortionForm from "$lib/component/form/DistortionForm.svelte";
   import LimiterForm from "$lib/component/form/LimiterForm.svelte";
   import PhaserForm from "$lib/component/form/PhaserForm.svelte";
   import ReverbForm from "$lib/component/form/ReverbForm.svelte";
@@ -14,25 +15,24 @@
   import { invoke } from "@tauri-apps/api/core";
   import { v4 } from "uuid";
 
-  function pedalReducer(kind: Kind, id?: string, name?: string): Pedal {
+  function pedalReducer(kind: Kind, id?: string): Pedal {
     id = id ? id : v4();
-    name = name ? name : "";
 
     switch (kind) {
       case "chorus":
-        return { id, kind, name, parameters: { rate: 0, depth: 0, feedback: 0, mix: 0 } };
+        return { id, kind, parameters: { rate: 0, depth: 0, feedback: 0, mix: 0 } };
       case "compressor":
-        return { id, kind, name, parameters: { ratio: 0, threshold: 0, release: 0, attack: 0 } };
+        return { id, kind, parameters: { ratio: 0, threshold: 0, release: 0, attack: 0 } };
       case "delay":
-        return { id, kind, name, parameters: { time: 0, mix: 0, feedback: 0 } };
+        return { id, kind, parameters: { time: 0, mix: 0, feedback: 0 } };
       case "distortion":
-        return { id, kind, name, parameters: { gain: 0 } };
+        return { id, kind, parameters: { gain: 0 } };
       case "limiter":
-        return { id, kind, name, parameters: { threshold: 0, release: 0 } };
+        return { id, kind, parameters: { threshold: 0, release: 0 } };
       case "phaser":
-        return { id, kind, name, parameters: { rate: 0, depth: 0, feedback: 0, mix: 0 } };
+        return { id, kind, parameters: { rate: 0, depth: 0, feedback: 0, mix: 0 } };
       case "reverb":
-        return { id, kind, name, parameters: { roomSize: 0 } };
+        return { id, kind, parameters: { roomSize: 0 } };
     }
   }
 
@@ -115,6 +115,12 @@
                 />
               {:else if pedal.kind == "delay"}
                 <DelayForm
+                  bind:kind={pedal.kind}
+                  bind:parameters={pedal.parameters}
+                  handleChange={() => updatePedal(pedal.id)}
+                />
+              {:else if pedal.kind == "distortion"}
+                <DistortionForm
                   bind:kind={pedal.kind}
                   bind:parameters={pedal.parameters}
                   handleChange={() => updatePedal(pedal.id)}
