@@ -1,6 +1,6 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
-  import { message } from "@tauri-apps/plugin-dialog";
+  import { message, open } from "@tauri-apps/plugin-dialog";
   import { v4 } from "uuid";
   import ChorusForm from "$lib/component/form/ChorusForm.svelte";
   import CompressorForm from "$lib/component/form/CompressorForm.svelte";
@@ -12,8 +12,9 @@
   import DeleteIcon from "$lib/component/icon/DeleteIcon.svelte";
   import PlayIcon from "$lib/component/icon/PlayIcon.svelte";
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
-  import { KINDS } from "$lib/constant";
+  import { KINDS, VALID_MUSIC_FILE_EXTENSIONS } from "$lib/constant";
   import type { Kind, Pedal } from "$lib/type";
+  import OpenIcon from "$lib/component/icon/OpenIcon.svelte";
 
   function pedalReducer(kind: Kind, id?: string): Pedal {
     id = id ? id : v4();
@@ -36,6 +37,20 @@
     }
   }
 
+  async function selectAudioFile() {
+    const selectedAudioFile = await open({
+      filters: [{ name: "Audio File", extensions: VALID_MUSIC_FILE_EXTENSIONS }],
+    });
+
+    if (Array.isArray(selectedAudioFile)) {
+      audioFilePath = selectedAudioFile[0].name;
+    } else if (selectedAudioFile && selectedAudioFile.name) {
+      audioFilePath = selectedAudioFile.name;
+    } else {
+      audioFilePath = null;
+    }
+  }
+
   function addPedal(kind: Kind) {
     pedals = [...pedals, pedalReducer(kind)];
   }
@@ -45,7 +60,6 @@
   }
 
   async function callPedalBoardGenerator(isSaved: boolean) {
-    await message(JSON.stringify(pedals));
     try {
       await invoke("call_pedal_board_generator", {
         sourcePath: "",
@@ -57,7 +71,7 @@
     }
   }
 
-  let files: FileList;
+  let audioFilePath: string | null = null;
 
   let pedals: Pedal[] = [];
 </script>
@@ -66,16 +80,17 @@
   <div class="flex flex-col space-y-3 mb-8">
     <div class="card bg-base-100 w-full shrink-0 shadow-2xl">
       <div class="card-body">
-        <h2 class="card-title">Audio</h2>
-        <div class="flex flex-col">
-          <div class="flex space-x-3">
-            <label class="form-control">
-              <div class="label">
-                <span class="label-text">Source File</span>
-              </div>
-              <input type="file" class="file-input file-input-bordered" bind:files />
-            </label>
-          </div>
+        <h2 class="card-title">Audio File</h2>
+        {#if audioFilePath}
+          <p>{audioFilePath}</p>
+        {:else}
+          <p>No audio file chosen</p>
+        {/if}
+        <div class="card-actions justify-end">
+          <button class="btn btn-outline" on:click={selectAudioFile}>
+            <OpenIcon />
+            Select
+          </button>
         </div>
       </div>
     </div>
