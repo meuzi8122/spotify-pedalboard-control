@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { invoke } from "@tauri-apps/api/core";
+  import { message } from "@tauri-apps/plugin-dialog";
+  import { v4 } from "uuid";
   import ChorusForm from "$lib/component/form/ChorusForm.svelte";
   import CompressorForm from "$lib/component/form/CompressorForm.svelte";
-  import TimeControl from "$lib/component/form/control/TimeControl.svelte";
   import DelayForm from "$lib/component/form/DelayForm.svelte";
   import DistortionForm from "$lib/component/form/DistortionForm.svelte";
   import LimiterForm from "$lib/component/form/LimiterForm.svelte";
@@ -9,12 +11,9 @@
   import ReverbForm from "$lib/component/form/ReverbForm.svelte";
   import DeleteIcon from "$lib/component/icon/DeleteIcon.svelte";
   import PlayIcon from "$lib/component/icon/PlayIcon.svelte";
-  import PlusIcon from "$lib/component/icon/PlusIcon.svelte";
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
+  import { KINDS } from "$lib/constant";
   import type { Kind, Pedal } from "$lib/type";
-  import { invoke } from "@tauri-apps/api/core";
-  import { message } from "@tauri-apps/plugin-dialog";
-  import { v4 } from "uuid";
 
   function pedalReducer(kind: Kind, id?: string): Pedal {
     id = id ? id : v4();
@@ -37,52 +36,30 @@
     }
   }
 
-  function addPedal() {
-    pedals = [...pedals, pedalReducer("chorus")];
-  }
-
-  /* TODO */
-  function updatePedal(id: string) {
-    const index = pedals.findIndex((pedal) => pedal.id == id);
-    pedals[index] = pedalReducer(pedals[index].kind);
-    pedals = pedals;
+  function addPedal(kind: Kind) {
+    pedals = [...pedals, pedalReducer(kind)];
   }
 
   function deletePedal(id: string) {
     pedals = pedals.filter((pedal) => pedal.id != id);
   }
 
-  async function play() {
+  async function callPedalBoardGenerator(isSaved: boolean) {
+    await message(JSON.stringify(pedals));
     try {
       await invoke("call_pedal_board_generator", {
         sourcePath: "",
         pedals,
-        startTime,
-        endTime,
-        isSaved: false,
+        isSaved,
       });
     } catch (err) {
       await message(`${err}`);
     }
   }
 
-  async function save() {
-    try {
-      await invoke("call_pedal_board_generator", { sourcePath: "", pedals, startTime, endTime, isSaved: true });
-    } catch (err) {
-      await message(`${err}`);
-    }
-  }
-
-  let startTime: string = "00:00";
-  let endTime: string = "00:00";
   let files: FileList;
 
   let pedals: Pedal[] = [];
-
-  $: isStartTimeInvalid = startTime.match(/[0-9]{2}:[0-9]{2}/) == null;
-  $: isEndTimeInvalid = endTime.match(/[0-9]{2}:[0-9]{2}/) == null;
-  $: isFormInvalid = isStartTimeInvalid || isEndTimeInvalid;
 </script>
 
 <div class="container mx-auto">
@@ -98,8 +75,20 @@
               </div>
               <input type="file" class="file-input file-input-bordered" bind:files />
             </label>
-            <TimeControl label="Start" bind:time={startTime} />
-            <TimeControl label="End" bind:time={endTime} />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col space-y-3 mb-8">
+      <div class="card bg-base-100 w-full shrink-0 shadow-2xl">
+        <div class="card-body">
+          <h2 class="card-title">Add Pedal</h2>
+          <p></p>
+          <div class="grid gap-2 grid-cols-5">
+            {#each KINDS as { name, kind }}
+              <button class="btn btn-outline" on:click={() => addPedal(kind)}>{name}</button>
+            {/each}
           </div>
         </div>
       </div>
@@ -113,51 +102,23 @@
               <DeleteIcon />
             </button>
           </div>
-          <h2 class="card-title">Pedal {index + 1}</h2>
+          <h2 class="card-title">Pedal-{index + 1} ({pedal.kind})</h2>
           <div class="flex flex-col">
             <div class="flex space-x-3">
               {#if pedal.kind == "chorus"}
-                <ChorusForm
-                  bind:kind={pedal.kind}
-                  bind:parameters={pedal.parameters}
-                  handleChange={() => updatePedal(pedal.id)}
-                />
+                <ChorusForm bind:parameters={pedal.parameters} />
               {:else if pedal.kind == "compressor"}
-                <CompressorForm
-                  bind:kind={pedal.kind}
-                  bind:parameters={pedal.parameters}
-                  handleChange={() => updatePedal(pedal.id)}
-                />
+                <CompressorForm bind:parameters={pedal.parameters} />
               {:else if pedal.kind == "delay"}
-                <DelayForm
-                  bind:kind={pedal.kind}
-                  bind:parameters={pedal.parameters}
-                  handleChange={() => updatePedal(pedal.id)}
-                />
+                <DelayForm bind:parameters={pedal.parameters} />
               {:else if pedal.kind == "distortion"}
-                <DistortionForm
-                  bind:kind={pedal.kind}
-                  bind:parameters={pedal.parameters}
-                  handleChange={() => updatePedal(pedal.id)}
-                />
+                <DistortionForm bind:parameters={pedal.parameters} />
               {:else if pedal.kind == "limiter"}
-                <LimiterForm
-                  bind:kind={pedal.kind}
-                  bind:parameters={pedal.parameters}
-                  handleChange={() => updatePedal(pedal.id)}
-                />
+                <LimiterForm bind:parameters={pedal.parameters} />
               {:else if pedal.kind == "phaser"}
-                <PhaserForm
-                  bind:kind={pedal.kind}
-                  bind:parameters={pedal.parameters}
-                  handleChange={() => updatePedal(pedal.id)}
-                />
+                <PhaserForm bind:parameters={pedal.parameters} />
               {:else if pedal.kind == "reverb"}
-                <ReverbForm
-                  bind:kind={pedal.kind}
-                  bind:parameters={pedal.parameters}
-                  handleChange={() => updatePedal(pedal.id)}
-                />
+                <ReverbForm bind:parameters={pedal.parameters} />
               {/if}
             </div>
           </div>
@@ -167,15 +128,11 @@
   </div>
 
   <div class="flex justify-end join">
-    <button class="btn btn-outline join-item" on:click={addPedal}>
-      <PlusIcon />
-      Add
-    </button>
-    <button class="btn btn-outline join-item" on:click={play} disabled={isFormInvalid}>
+    <button class="btn btn-outline join-item" on:click={() => callPedalBoardGenerator(false)}>
       <PlayIcon />
       Play
     </button>
-    <button class="btn btn-outline join-item" on:click={save} disabled={isFormInvalid}>
+    <button class="btn btn-outline join-item" on:click={() => callPedalBoardGenerator(true)}>
       <SaveIcon />
       Save
     </button>
