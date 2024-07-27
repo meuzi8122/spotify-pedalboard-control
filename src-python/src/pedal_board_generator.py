@@ -7,7 +7,7 @@ from pedalboard.io import AudioFile
 
 class PedalBoardGenerator:
     @classmethod
-    def save(cls, pedals: list[dict], start_time: str, end_time: str, source_path: str, output_path: str | None = None):
+    def save(cls, pedals: list[dict], source_path: str, output_path: str | None = None):
         if not output_path:
             output_path = source_path
 
@@ -27,12 +27,12 @@ class PedalBoardGenerator:
                     output_file.write(effected)
 
     @classmethod
-    def play(cls, pedals: list[dict], start_time: str, end_time: str, source_path: str):
+    def play(cls, pedals: list[dict], source_path: str):
         with tempfile.TemporaryDirectory() as tmp_dir:
             extension = source_path.split(".")[-1]
             output_path = f"{tmp_dir}/tmp.{extension}"
 
-            cls.save(pedals=pedals, start_time=start_time, end_time=end_time, source_path=source_path, output_path=output_path)
+            cls.save(pedals=pedals, source_path=source_path, output_path=output_path)
 
             audio, sr = librosa.load(path=output_path)
             sd.play(audio, sr)

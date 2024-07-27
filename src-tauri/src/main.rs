@@ -7,20 +7,19 @@ use tauri_plugin_shell::ShellExt;
 #[tauri::command]
 async fn call_pedal_board_generator(
     app: tauri::AppHandle,
-    source_path: String,
-    start_time: String,
-    end_time: String,
+    audio_file_path: String,
     pedals: Vec<pedal::model::Pedal>,
-
+    is_saved: bool
 ) {
+    print!("called");
     match serde_json::to_string(&pedals) {
         Ok(stringified_pedals) => {
             let _ = app.shell().sidecar("main").unwrap().args([
-                source_path,
-                start_time,
-                end_time,
-                stringified_pedals,
+                &audio_file_path,
+                &stringified_pedals,
+                &is_saved.to_string()
             ]);
+            print!("audio_file_path={}, pedals={}, is_saved={}", &audio_file_path, &stringified_pedals, &is_saved);
         }
         Err(err) => panic!("{}", err),
     }

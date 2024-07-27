@@ -5,4 +5,4 @@
   export let parameters: Pedal["parameters"];
 </script>
 
-<ParameterControl label="Gain" bind:value={parameters.gain} />
+<ParameterControl label="Gain" bind:value={parameters.gain} unit="db" />

@@ -70,6 +70,8 @@
   let audioFilePath: string | null = null;
 
   let pedals: Pedal[] = [];
+
+  $: isFormInvalid = audioFilePath == null;
 </script>
 
 <div class="container mx-auto">
@@ -98,7 +100,9 @@
           <p></p>
           <div class="grid gap-2 grid-cols-5">
             {#each KINDS as { name, kind }}
-              <button class="btn btn-outline" on:click={() => addPedal(kind)}>{name}</button>
+              <button class="btn btn-outline" on:click={() => addPedal(kind)} data-testid={`add-${name}-button`}
+                >{name}</button
+              >
             {/each}
           </div>
         </div>
@@ -106,7 +110,7 @@
     </div>
 
     {#each pedals as pedal, index}
-      <div class="card bg-base-100 w-full shrink-0 shadow-2xl">
+      <div class="card bg-base-100 w-full shrink-0 shadow-2xl" data-testid="pedal-card">
         <div class="card-body">
           <div class="card-actions justify-end">
             <button class="btn btn-square btn-sm" on:click={() => deletePedal(pedal.id)}>
@@ -139,11 +143,11 @@
   </div>
 
   <div class="flex justify-end join">
-    <button class="btn btn-outline join-item" on:click={() => callPedalBoardGenerator(false)}>
+    <button class="btn btn-outline join-item" on:click={() => callPedalBoardGenerator(false)} disabled={isFormInvalid}>
       <PlayIcon />
       Play
     </button>
-    <button class="btn btn-outline join-item" on:click={() => callPedalBoardGenerator(true)}>
+    <button class="btn btn-outline join-item" on:click={() => callPedalBoardGenerator(true)} disabled={isFormInvalid}>
       <SaveIcon />
       Save
     </button>
