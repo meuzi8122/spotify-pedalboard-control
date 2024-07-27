@@ -43,9 +43,9 @@
     });
 
     if (Array.isArray(selectedAudioFile)) {
-      audioFilePath = selectedAudioFile[0].name;
-    } else if (selectedAudioFile && selectedAudioFile.name) {
-      audioFilePath = selectedAudioFile.name;
+      audioFilePath = selectedAudioFile[0].path;
+    } else if (selectedAudioFile && selectedAudioFile.path) {
+      audioFilePath = selectedAudioFile.path;
     } else {
       audioFilePath = null;
     }
