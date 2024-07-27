@@ -10,11 +10,11 @@
   import PhaserForm from "$lib/component/form/PhaserForm.svelte";
   import ReverbForm from "$lib/component/form/ReverbForm.svelte";
   import DeleteIcon from "$lib/component/icon/DeleteIcon.svelte";
+  import OpenIcon from "$lib/component/icon/OpenIcon.svelte";
   import PlayIcon from "$lib/component/icon/PlayIcon.svelte";
   import SaveIcon from "$lib/component/icon/SaveIcon.svelte";
-  import { KINDS, VALID_MUSIC_FILE_EXTENSIONS } from "$lib/constant";
+  import { KINDS, VALID_AUDIO_FILE_EXTENSIONS } from "$lib/constant";
   import type { Kind, Pedal } from "$lib/type";
-  import OpenIcon from "$lib/component/icon/OpenIcon.svelte";
 
   function pedalReducer(kind: Kind, id?: string): Pedal {
     id = id ? id : v4();
@@ -39,7 +39,7 @@
 
   async function selectAudioFile() {
     const selectedAudioFile = await open({
-      filters: [{ name: "Audio File", extensions: VALID_MUSIC_FILE_EXTENSIONS }],
+      filters: [{ name: "Audio File", extensions: VALID_AUDIO_FILE_EXTENSIONS }],
     });
 
     if (Array.isArray(selectedAudioFile)) {
@@ -61,11 +61,7 @@
 
   async function callPedalBoardGenerator(isSaved: boolean) {
     try {
-      await invoke("call_pedal_board_generator", {
-        sourcePath: "",
-        pedals,
-        isSaved,
-      });
+      await invoke("call_pedal_board_generator", { audioFilePath, pedals, isSaved });
     } catch (err) {
       await message(`${err}`);
     }

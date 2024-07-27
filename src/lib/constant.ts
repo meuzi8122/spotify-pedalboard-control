@@ -1,6 +1,6 @@
 import type { Kind } from "./type";
 
-export const VALID_MUSIC_FILE_EXTENSIONS = ["mp3", "wav"];
+export const VALID_AUDIO_FILE_EXTENSIONS = ["mp3", "wav"];
 
 export const KINDS: { name: string; kind: Kind }[] = [
   { name: "Chorus", kind: "chorus" },
